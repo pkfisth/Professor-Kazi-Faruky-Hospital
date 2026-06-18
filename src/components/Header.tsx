@@ -45,7 +45,7 @@ export default function Header({ onOpenBookModal, onOpenReportModal }: HeaderPro
               <HeartPulse className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-display font-bold text-slate-800 text-base md:text-lg leading-tight tracking-tight mt-0.5">
+              <p className="font-display font-bold text-[#009689] text-base md:text-lg leading-tight tracking-tight mt-0.5">
                 Professor Kazi Faruky Hospital
               </p>
               <p className="text-[10px] text-teal-650 font-mono tracking-wider uppercase font-semibold text-center">

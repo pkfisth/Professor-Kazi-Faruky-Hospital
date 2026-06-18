@@ -24,8 +24,8 @@ export default function Footer({ onOpenBookModal, onOpenReportModal }: FooterPro
                 <HeartPulse className="h-5 w-5" />
               </div>
               <div>
-                <span className="font-display font-medium text-white text-base lg:text-lg tracking-tight">Kazi Faruky Hospital</span>
-                <p className="text-[9px] font-mono tracking-widest text-teal-400 uppercase font-bold">Excellence in Healthcare</p>
+                <span className="font-display font-medium text-white text-base lg:text-lg tracking-tight">Professor Kazi Faruky Hospital</span>
+                <p className="text-[9px] font-mono tracking-widest text-teal-400 uppercase font-bold text-center">Excellence in Healthcare</p>
               </div>
             </div>
             
