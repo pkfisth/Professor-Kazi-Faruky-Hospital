@@ -48,7 +48,7 @@ export default function Header({ onOpenBookModal, onOpenReportModal }: HeaderPro
               <p className="font-display font-bold text-slate-800 text-base md:text-lg leading-tight tracking-tight mt-0.5">
                 Professor Kazi Faruky Hospital
               </p>
-              <p className="text-[10px] text-teal-650 font-mono tracking-wider uppercase font-semibold">
+              <p className="text-[10px] text-teal-650 font-mono tracking-wider uppercase font-semibold text-center">
                 Excellence in Healthcare
               </p>
             </div>

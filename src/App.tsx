@@ -15,7 +15,8 @@ import OnlineReportModal from './components/OnlineReportModal';
 import DoctorProfileModal from './components/DoctorProfileModal';
 
 import { Doctor, Appointment } from './types';
-import { CalendarRange, X, CheckSquare } from 'lucide-react';
+import { CalendarRange, X, CheckSquare, ArrowUpDown } from 'lucide-react';
+import { DOCTORS } from './data';
 
 export default function App() {
   // Modal toggle state managers
@@ -30,6 +31,7 @@ export default function App() {
   // Active state local storage synchronization
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [showBookingsPane, setShowBookingsPane] = useState(false);
+  const [sortBy, setSortBy] = useState<'date' | 'specialty'>('date');
 
   // Load appointments from localStorage
   useEffect(() => {
@@ -66,6 +68,21 @@ export default function App() {
     setSelectedDoctor(doc);
     setIsProfileOpen(true);
   };
+
+  const sortedAppointments = [...appointments].sort((a, b) => {
+    if (sortBy === 'date') {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    } else {
+      const docA = DOCTORS.find(d => d.id === a.doctorId);
+      const docB = DOCTORS.find(d => d.id === b.doctorId);
+      const specA = docA?.specialty || '';
+      const specB = docB?.specialty || '';
+      if (specA !== specB) {
+        return specA.localeCompare(specB);
+      }
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+  });
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 relative selection:bg-teal-500 selection:text-white antialiased">
@@ -191,25 +208,49 @@ export default function App() {
                 </button>
               </div>
 
+              {/* Enhanced Sort Selection Dropdown */}
+              <div className="flex items-center justify-between text-[11px] pb-1 border-b border-slate-100/85">
+                <span className="text-slate-500 font-semibold flex items-center gap-1">
+                  <ArrowUpDown className="h-3.5 w-3.5 text-teal-600" /> Sort consultations
+                </span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as 'date' | 'specialty')}
+                  className="bg-slate-50 border border-slate-205 rounded-xl px-2 py-1 text-[10px] text-slate-700 font-bold focus:outline-none focus:border-teal-500 cursor-pointer shadow-xs"
+                >
+                  <option value="date">Nearest Date First</option>
+                  <option value="specialty">Doctor Specialty</option>
+                </select>
+              </div>
+
               <div className="max-h-60 overflow-y-auto space-y-2.5 text-[11px] pr-1 scrollbar-thin">
-                {appointments.map((appt) => (
-                  <div key={appt.id} className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between gap-1">
-                    <div>
-                      <div className="flex justify-between font-mono text-[9px] text-slate-400 font-bold">
-                        <span>ID: {appt.id}</span>
-                        <span className="text-teal-700">SERIAL #{appt.serialNumber}</span>
+                {sortedAppointments.map((appt) => {
+                  const doc = DOCTORS.find(d => d.id === appt.doctorId);
+                  return (
+                    <div key={appt.id} className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between gap-1.5 hover:border-teal-300 transition-colors">
+                      <div>
+                        <div className="flex justify-between font-mono text-[9px] text-slate-400 font-bold">
+                          <span>ID: {appt.id}</span>
+                          <span className="text-teal-700 font-semibold">SERIAL #{appt.serialNumber}</span>
+                        </div>
+                        <p className="font-bold text-slate-800 text-xs mt-1">Patient: {appt.patientName}</p>
+                        {doc && (
+                          <div className="mt-1 bg-white border border-slate-100 rounded-lg p-1.5 space-y-0.5 shadow-2xs">
+                            <p className="font-semibold text-slate-800 text-[10px] leading-tight">{doc.name}</p>
+                            <p className="text-[8px] text-teal-600 font-mono uppercase tracking-wider font-bold leading-none">{doc.specialty}</p>
+                          </div>
+                        )}
+                        <p className="text-slate-500 mt-1 text-[10px]">Date: {appt.date} • {appt.timeSlot}</p>
                       </div>
-                      <p className="font-bold text-slate-800 text-xs mt-1">{appt.patientName}</p>
-                      <p className="text-slate-500">Date: {appt.date} • {appt.timeSlot}</p>
+                      <button
+                        onClick={() => handleCancelAppointment(appt.id)}
+                        className="text-red-600 hover:text-red-800 hover:underline font-semibold text-[9px] text-left mt-0.5 cursor-pointer"
+                      >
+                        Cancel Consultation
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleCancelAppointment(appt.id)}
-                      className="text-red-600 hover:text-red-800 hover:underline font-bold text-[9px] text-left mt-1 cursor-pointer"
-                    >
-                      Cancel Consultation
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <p className="text-[10px] text-slate-400 leading-normal bg-slate-50 p-2.5 rounded-lg text-center font-mono">
