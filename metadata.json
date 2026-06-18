@@ -1,0 +1,6 @@
+{
+  "name": "Professor Kazi Faruky Hospital",
+  "description": "Premium, modern healthcare platform for Professor Kazi Faruky Hospital featuring online appointments, direct doctor booking, diagnostic report lookup, and interactive helpdesk features.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
